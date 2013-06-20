@@ -101,6 +101,15 @@ class ErlangTermEncoder {
         for (v <- r.id) {
           putUnsignedInt(b, v)
         }
+      case m: Map[_, _] =>
+        putUnsignedByte(b, 116)
+        putUnsignedInt(b, m size)
+        for (key <- m.keys) {
+          encode(b, key)
+        }
+        for (value <- m.values) {
+          encode(b, value)
+        }
       case t: Product => // must be last as case classes are Products too.
         putUnsignedByte(b, 104)
         putUnsignedByte(b, t.productArity toShort)

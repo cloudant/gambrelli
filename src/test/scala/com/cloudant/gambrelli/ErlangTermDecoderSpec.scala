@@ -155,6 +155,14 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
       decoder.decode(bs3) must beEqualTo(BigInt("0"))
     }
 
+    "decode map" in new decoder {
+      val map = Map('abc -> 'cba)
+      val bs = ByteString(131, 116, 0, 0, 0, 1,
+        100, 0, 3, 97, 98, 99,
+        100, 0, 3, 99, 98, 97)
+      decoder.decode(bs) must beEqualTo(map)
+    }
+
     "decode all the things at once" in new decoder {
       val bs = ByteString(131, 104, 8, 100, 0, 3, 102, 111, 111, 107, 0, 3,
         102, 111, 111, 109, 0, 0, 0, 3, 102, 111, 111, 97, 1, 99, 49, 46, 48,

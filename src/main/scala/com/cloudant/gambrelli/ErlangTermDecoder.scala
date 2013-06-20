@@ -96,6 +96,11 @@ class ErlangTermDecoder {
           unsignedInt(it)
         }
         Reference(node, creation, id)
+      case 116 => // MAP_EXT
+        val size = unsignedInt(it)
+        val keys = for (i <- 1L to size) yield decode(it)
+        val values = for (i <- 1L to size) yield decode(it)
+        keys.zip(values).toMap
     }
   }
 
