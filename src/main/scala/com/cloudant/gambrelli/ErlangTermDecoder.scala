@@ -18,6 +18,7 @@ package com.cloudant.gambrelli
 
 import akka.util._
 import java.nio.ByteOrder
+import scala.language.postfixOps
 
 class ErlangTermDecoder {
 

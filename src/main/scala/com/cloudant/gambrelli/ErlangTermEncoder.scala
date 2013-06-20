@@ -18,6 +18,7 @@ package com.cloudant.gambrelli
 
 import java.nio.ByteOrder
 import akka.util.{ByteStringBuilder, ByteString}
+import scala.language.postfixOps
 
 class ErlangTermEncoder {
 
@@ -54,14 +55,14 @@ class ErlangTermEncoder {
       case p: Port =>
         putUnsignedByte(b, 102)
         encode(b, p.node)
-        putUnsignedInt(b, p.id)
-        putUnsignedByte(b, p.creation)
+        putUnsignedInt(b, p id)
+        putUnsignedByte(b, p creation)
       case p: Pid =>
         putUnsignedByte(b, 103)
         encode(b, p.node)
-        putUnsignedInt(b, p.id)
-        putUnsignedInt(b, p.serial)
-        putUnsignedByte(b, p.creation)
+        putUnsignedInt(b, p id)
+        putUnsignedInt(b, p serial)
+        putUnsignedByte(b, p creation)
       case Nil =>
         putUnsignedByte(b, 106)
       case l: List[_] =>
@@ -95,9 +96,9 @@ class ErlangTermEncoder {
         encode(b, f.arity)
       case r: Reference =>
         putUnsignedByte(b, 114)
-        putUnsignedShort(b, r.id.length)
+        putUnsignedShort(b, r.id length)
         encode(b, r.node)
-        putUnsignedByte(b, r.creation)
+        putUnsignedByte(b, r creation)
         for (v <- r.id) {
           putUnsignedInt(b, v)
         }
