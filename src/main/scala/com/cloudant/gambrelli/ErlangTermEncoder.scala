@@ -70,7 +70,7 @@ class ErlangTermEncoder {
           putUnsignedByte(b, 107)
           putUnsignedShort(b, l length)
           for (item <- l) {
-            putUnsignedByte(b, item.asInstanceOf[Int] toShort)
+            putUnsignedByte(b, toInt(item).get toShort)
           }
         } else {
           encodeList(b, l)
@@ -122,12 +122,21 @@ class ErlangTermEncoder {
 
   private def isString(l: List[Any]) = {
     l.length < 65536 && l.forall {x =>
-      x match {
-        case x:Int =>
-          x >= 0 && x < 128
-        case _ => false
+      toInt(x) match {
+        case Some(i) =>
+          i >= 0 && i < 128
+        case None =>
+          false
       }
     }
+  }
+
+  private def toInt(any: Any): Option[Int] = any match {
+    case v: Int => Some(v)
+    case v: Short => Some(v toInt)
+    case v: Byte => Some(v toInt)
+    case v: Long => Some(v toInt)
+    case _ => None
   }
 
   private def encodeList(b: ByteStringBuilder, l: Seq[Any]) {

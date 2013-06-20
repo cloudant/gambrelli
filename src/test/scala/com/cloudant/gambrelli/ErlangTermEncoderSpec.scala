@@ -93,6 +93,24 @@ class ErlangTermEncoderSpec extends SpecificationWithJUnit {
       encoder.encode(list) must beEqualTo(bs)
     }
 
+    "encode 'string' with shorts" in new encoder {
+      val list = List(65 toShort, 66 toShort, 67 toShort)
+      val bs = ByteString(131, 107, 0, 3, 65, 66, 67)
+      encoder.encode(list) must beEqualTo(bs)
+    }
+
+    "encode 'string' with bytes" in new encoder {
+      val list = List(65 toByte, 66 toByte, 67 toByte)
+      val bs = ByteString(131, 107, 0, 3, 65, 66, 67)
+      encoder.encode(list) must beEqualTo(bs)
+    }
+
+    "encode 'string' with longs" in new encoder {
+      val list = List(65L, 66L, 67L)
+      val bs = ByteString(131, 107, 0, 3, 65, 66, 67)
+      encoder.encode(list) must beEqualTo(bs)
+    }
+
     "encode non-empty proper list" in new encoder {
       val list = List(500, 500)
       val bs = ByteString(131, 108, 0, 0, 0, 2, 98, 0, 0, 1,
