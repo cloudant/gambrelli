@@ -132,11 +132,11 @@ class ErlangTermEncoder {
   }
 
   private def toInt(any: Any): Option[Int] = any match {
-    case v: Int => Some(v)
+    case v: Int   => Some(v)
     case v: Short => Some(v toInt)
-    case v: Byte => Some(v toInt)
-    case v: Long => Some(v toInt)
-    case _ => None
+    case v: Byte  => Some(v toInt)
+    case v: Long  => Some(v toInt)
+    case _        => None
   }
 
   private def encodeList(b: ByteStringBuilder, l: Seq[Any]) {
