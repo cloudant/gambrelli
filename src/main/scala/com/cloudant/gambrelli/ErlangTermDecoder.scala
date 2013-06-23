@@ -188,8 +188,7 @@ class ErlangTermDecoder {
         decode(it), decode(it), decode(it), decode(it), decode(it), decode(it),
         decode(it), decode(it), decode(it), decode(it), decode(it), decode(it))
       case _ =>
-        throw new IllegalArgumentException("Tuples of " + arity +
-          " not supported")
+        new ArbitraryTuple(for (i <- 1 to arity) yield { decode(it) })
     }
   }
 

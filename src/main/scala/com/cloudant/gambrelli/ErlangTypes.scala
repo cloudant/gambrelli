@@ -26,7 +26,7 @@ case class ImproperList(list: Seq[Any], tail: Any)
 
 case class Fun(module: Symbol, function: Symbol, arity: Short)
 
-class ArbitraryTuple[A](elements: List[A]) extends Product {
+class ArbitraryTuple[A](elements: Seq[A]) extends Product {
 
   def productArity: Int = elements.size
 
@@ -52,6 +52,10 @@ class ArbitraryTuple[A](elements: List[A]) extends Product {
       true
     case _ =>
       false
+  }
+
+  override def toString = {
+    elements.toString()
   }
 
 }

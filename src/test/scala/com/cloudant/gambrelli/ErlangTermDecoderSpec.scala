@@ -84,8 +84,8 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
         Reference(Symbol("nonode@nohost"), 1, List(65, 0, 0)))
     }
 
-    "decode small tuples" in new decoder {
-      for (i <- 1 to 22) {
+    "decode small and large tuples" in new decoder {
+      for (i <- 1 to 23) {
         val tuple = new ArbitraryTuple((1 to i).toList)
         val b = new ByteStringBuilder
         b ++= ByteString(131, 104, i)
@@ -94,15 +94,6 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
         }
         tuple must beEqualTo(decoder.decode(b.result()))
       }
-    }
-
-    "throw error for small tuples over 22 elements long" in new decoder {
-      val bs = ByteString(131, 104, 23, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1,
-        97, 1, 97, 1, 97, 1, 97, 1,
-        97, 1, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1, 97, 1,
-        97, 1,
-        97, 1, 97, 1, 97, 1)
-      decoder.decode(bs) must throwA[IllegalArgumentException]
     }
 
     "decode empty list" in new decoder {

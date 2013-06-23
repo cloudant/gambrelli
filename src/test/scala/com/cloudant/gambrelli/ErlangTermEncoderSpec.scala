@@ -75,9 +75,9 @@ class ErlangTermEncoderSpec extends SpecificationWithJUnit {
       encoder.encode(ref) must beEqualTo(bs)
     }
 
-    "encode small tuples" in new encoder {
-      for (i <- 1 to 22) {
-        val tuple = new ArbitraryTuple((1 to i).toList)
+    "encode small and large tuples" in new encoder {
+      for (i <- 1 to 23) {
+        val tuple = new ArbitraryTuple(1 to i)
 
         val b = new ByteStringBuilder
         b ++= ByteString(131, 104, i)
