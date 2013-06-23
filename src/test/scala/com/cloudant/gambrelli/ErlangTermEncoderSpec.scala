@@ -18,7 +18,7 @@ package com.cloudant.gambrelli
 
 import org.specs2.specification.Scope
 import org.specs2.mutable.SpecificationWithJUnit
-import akka.util.ByteString
+import akka.util.{ByteStringBuilder, ByteString}
 
 class ErlangTermEncoderSpec extends SpecificationWithJUnit {
 
@@ -76,9 +76,16 @@ class ErlangTermEncoderSpec extends SpecificationWithJUnit {
     }
 
     "encode small tuples" in new encoder {
-      val tuple = (1, 2, 3)
-      val bs = ByteString(131, 104, 3, 97, 1, 97, 2, 97, 3)
-      encoder.encode(tuple) must beEqualTo(bs)
+      for (i <- 1 to 22) {
+        val tuple = new ArbitraryTuple((1 to i).toList)
+
+        val b = new ByteStringBuilder
+        b ++= ByteString(131, 104, i)
+        for (j <- 1 to i) {
+          b ++= ByteString(97, j)
+        }
+        encoder.encode(tuple) must beEqualTo(b.result())
+      }
     }
 
     "encode empty list" in new encoder {

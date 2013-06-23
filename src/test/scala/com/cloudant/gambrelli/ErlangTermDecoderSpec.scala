@@ -17,7 +17,7 @@
 package com.cloudant.gambrelli
 
 import org.specs2.mutable.SpecificationWithJUnit
-import akka.util.ByteString
+import akka.util.{ByteStringBuilder, ByteString}
 import org.specs2.specification.Scope
 
 class ErlangTermDecoderSpec extends SpecificationWithJUnit {
@@ -85,8 +85,15 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
     }
 
     "decode small tuples" in new decoder {
-      val bs = ByteString(131, 104, 3, 97, 1, 97, 2, 97, 3)
-      decoder.decode(bs) must beEqualTo((1, 2, 3))
+      for (i <- 1 to 22) {
+        val tuple = new ArbitraryTuple((1 to i).toList)
+        val b = new ByteStringBuilder
+        b ++= ByteString(131, 104, i)
+        for (j <- 1 to i) {
+          b ++= ByteString(97, j)
+        }
+        tuple must beEqualTo(decoder.decode(b.result()))
+      }
     }
 
     "throw error for small tuples over 22 elements long" in new decoder {

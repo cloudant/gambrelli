@@ -25,3 +25,33 @@ case class Pid(node: Symbol, id: Long, serial: Long, creation: Short)
 case class ImproperList(list: Seq[Any], tail: Any)
 
 case class Fun(module: Symbol, function: Symbol, arity: Short)
+
+class ArbitraryTuple[A](elements: List[A]) extends Product {
+
+  def productArity: Int = elements.size
+
+  def productElement(n: Int) = elements(n)
+
+  def canEqual(that: Any) = that match {
+    case _: Product =>
+      true
+    case _ =>
+      false
+  }
+
+  override def equals(other: Any): Boolean = other match {
+    case other: Product =>
+      if (productArity != other.productArity) {
+        return false
+      }
+      for (j <- 0 to productArity - 1) {
+        if (productElement(j) != other.productElement(j)) {
+          return false
+        }
+      }
+      true
+    case _ =>
+      false
+  }
+
+}
