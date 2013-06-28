@@ -22,6 +22,8 @@ import org.specs2.specification.Scope
 
 class ErlangTermDecoderSpec extends SpecificationWithJUnit {
 
+  import Unsigned._
+
   "Erlang term decoder" should {
 
     "decode floats efficiently" in new decoder {

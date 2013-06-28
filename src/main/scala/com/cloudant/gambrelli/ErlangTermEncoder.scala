@@ -16,13 +16,12 @@
 
 package com.cloudant.gambrelli
 
-import java.nio.ByteOrder
 import akka.util.{ByteStringBuilder, ByteString}
 import scala.language.postfixOps
 
 class ErlangTermEncoder {
 
-  implicit val byteOrder = ByteOrder.BIG_ENDIAN
+  import Unsigned._
 
   def encode(any: Any): ByteString = {
     val b = new ByteStringBuilder
@@ -145,18 +144,6 @@ class ErlangTermEncoder {
     for (item <- l) {
       encode(b, item)
     }
-  }
-
-  private def putUnsignedByte(b: ByteStringBuilder, v: Short) {
-    b.putByte(v toByte)
-  }
-
-  private def putUnsignedShort(b: ByteStringBuilder, v: Int) {
-    b.putShort(v toShort)
-  }
-
-  private def putUnsignedInt(b: ByteStringBuilder, v: Long) {
-    b.putInt(v toInt)
   }
 
 }

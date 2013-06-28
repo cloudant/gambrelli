@@ -17,12 +17,11 @@
 package com.cloudant.gambrelli
 
 import akka.util._
-import java.nio.ByteOrder
 import scala.language.postfixOps
 
 class ErlangTermDecoder {
 
-  implicit val byteOrder = ByteOrder.BIG_ENDIAN
+  import Unsigned._
 
   def decode(bs: ByteString): Any = {
     val it = bs.iterator
@@ -103,18 +102,6 @@ class ErlangTermDecoder {
         val values = for (i <- 1L to size) yield decode(it)
         keys.zip(values).toMap
     }
-  }
-
-  private def unsignedByte(it: ByteIterator): Short = {
-    (it.getByte & 0xFF).toShort
-  }
-
-  private def unsignedShort(it: ByteIterator): Int = {
-    it.getShort & 0xFFFF
-  }
-
-  private def unsignedInt(it: ByteIterator): Long = {
-    it.getInt & 0x00000000FFFFFFFFL
   }
 
   private def dropSlice(it: ByteIterator,
