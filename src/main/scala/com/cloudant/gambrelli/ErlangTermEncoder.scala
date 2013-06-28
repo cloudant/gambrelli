@@ -19,7 +19,7 @@ package com.cloudant.gambrelli
 import akka.util.{ByteStringBuilder, ByteString}
 import scala.language.postfixOps
 
-class ErlangTermEncoder {
+class ErlangTermEncoder(typeEncoder: TypeEncoder = NoneTypeEncoder) {
 
   import Unsigned._
 
@@ -32,6 +32,8 @@ class ErlangTermEncoder {
 
   def encode(b: ByteStringBuilder, any: Any) {
     any match {
+      case typeEncoder() =>
+        typeEncoder.encode(any, b)
       case f: Float =>
         encode(b, f toDouble)
       case d: Double =>

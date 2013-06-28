@@ -161,6 +161,12 @@ class ErlangTermEncoderSpec extends SpecificationWithJUnit {
       encoder.encode(map) must beEqualTo(bs)
     }
 
+    "encode string as binary with custom encoder" in {
+      val encoder = new ErlangTermEncoder(BinaryAsStringEncoder)
+      encoder.encode("abc") must beEqualTo(
+        ByteString(131, 109, 0, 0, 0, 3, 97, 98, 99))
+    }
+
     "encode complex thing" in new encoder {
       val thing = (1, 2, 3, ByteString("foo"), 'foo)
       val bs = ByteString(131, 104, 5, 97, 1, 97, 2, 97, 3, 109, 0, 0, 0, 3,
