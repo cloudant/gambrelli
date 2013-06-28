@@ -16,6 +16,7 @@
 package com.cloudant.gambrelli
 
 import akka.util.ByteIterator
+import com.cloudant.gambrelli.Unsigned._
 
 trait TypeDecoder {
   def unapply(ord: Short): Boolean
@@ -28,4 +29,16 @@ object NoneTypeDecoder extends TypeDecoder {
   def unapply(ord: Short) = false
 
   def decode(ord: Short, it: ByteIterator): Any = ()
+}
+
+object BinaryAsStringDecoder extends TypeDecoder {
+  def unapply(ord: Short) = ord == 109
+
+  def decode(ord: Short, it: ByteIterator) = ord match {
+    case 109 =>
+      val len = unsignedInt(it).toInt
+      val bytes = new Array[Byte](len)
+      it.getBytes(bytes)
+      new String(bytes, "UTF-8")
+  }
 }

@@ -164,20 +164,7 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
     }
 
     "decode binary as string using custom type decoder" in {
-      val typeDecoder = new TypeDecoder {
-        def unapply(ord: Short) = ord == 109
-
-        def decode(ord: Short, it: ByteIterator) = ord match {
-          case 109 =>
-            val len = unsignedInt(it).toInt
-            val bytes = new Array[Byte](len)
-            it.getBytes(bytes)
-            new String(bytes, "UTF-8")
-        }
-
-      }
-
-      val decoder = new ErlangTermDecoder(typeDecoder)
+      val decoder = new ErlangTermDecoder(BinaryAsStringDecoder)
       val bs = ByteString(131, 109, 0, 0, 0, 3, 97, 98, 99)
       decoder.decode(bs) must beEqualTo("abc")
     }
