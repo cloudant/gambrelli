@@ -16,7 +16,6 @@
 package com.cloudant.gambrelli
 
 import akka.util.ByteIterator
-import com.cloudant.gambrelli.Unsigned._
 
 trait TypeDecoder {
   def unapply(ord: Short): Boolean
@@ -32,6 +31,8 @@ object NoneTypeDecoder extends TypeDecoder {
 }
 
 object BinaryAsStringDecoder extends TypeDecoder {
+  import Unsigned._
+
   def unapply(ord: Short) = ord == 109
 
   def decode(ord: Short, it: ByteIterator) = ord match {
