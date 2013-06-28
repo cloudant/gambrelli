@@ -17,7 +17,7 @@
 package com.cloudant.gambrelli
 
 import org.specs2.mutable.SpecificationWithJUnit
-import akka.util.{ByteStringBuilder, ByteString}
+import akka.util.{ByteIterator, ByteStringBuilder, ByteString}
 import org.specs2.specification.Scope
 
 class ErlangTermDecoderSpec extends SpecificationWithJUnit {
@@ -161,6 +161,25 @@ class ErlangTermDecoderSpec extends SpecificationWithJUnit {
         100, 0, 3, 97, 98, 99,
         100, 0, 3, 99, 98, 97)
       decoder.decode(bs) must beEqualTo(map)
+    }
+
+    "decode binary as string using custom type decoder" in {
+      val typeDecoder = new TypeDecoder {
+        def unapply(ord: Short) = ord == 109
+
+        def decode(ord: Short, it: ByteIterator) = ord match {
+          case 109 =>
+            val len = unsignedInt(it).toInt
+            val bytes = new Array[Byte](len)
+            it.getBytes(bytes)
+            new String(bytes, "UTF-8")
+        }
+
+      }
+
+      val decoder = new ErlangTermDecoder(typeDecoder)
+      val bs = ByteString(131, 109, 0, 0, 0, 3, 97, 98, 99)
+      decoder.decode(bs) must beEqualTo("abc")
     }
 
     "decode all the things at once" in new decoder {

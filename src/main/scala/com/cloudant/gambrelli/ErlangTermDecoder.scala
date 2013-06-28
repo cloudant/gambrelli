@@ -19,7 +19,7 @@ package com.cloudant.gambrelli
 import akka.util._
 import scala.language.postfixOps
 
-class ErlangTermDecoder {
+class ErlangTermDecoder(typeDecoder: TypeDecoder = NoneTypeDecoder) {
 
   import Unsigned._
 
@@ -32,7 +32,10 @@ class ErlangTermDecoder {
   }
 
   def decode(it: ByteIterator): Any = {
-    unsignedByte(it) match {
+    val ord = unsignedByte(it)
+    ord match {
+      case typeDecoder() =>
+        typeDecoder.decode(ord, it)
       case 70 => // NEW_FLOAT_EXT
         it.getDouble
       case 97 => // SMALL_INTEGER_EXT
